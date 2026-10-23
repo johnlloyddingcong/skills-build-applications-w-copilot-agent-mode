@@ -1,14 +1,15 @@
+import { getJson } from '../api/client.js';
 import { CapabilityCard } from './CapabilityCard.js';
 
 type TeamItem = { _id?: string; name: string; mascot: string; members?: string[] };
+const loadTeams = () => getJson<{ teams: TeamItem[] }>('/api/teams').then(({ teams }) => teams);
 
 export default function Teams() {
   return (
     <CapabilityCard<TeamItem>
       title="Teams"
       description="Manage teams and members."
-      path="/api/teams"
-      resourceKey="teams"
+      loadItems={loadTeams}
       emptyText="No teams yet."
       itemKey={(team, index) => team._id ?? `${team.name}-${index}`}
       renderItem={(team) => (

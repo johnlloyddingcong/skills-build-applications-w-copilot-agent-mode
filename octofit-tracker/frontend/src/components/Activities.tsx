@@ -1,14 +1,15 @@
+import { getJson } from '../api/client.js';
 import { CapabilityCard } from './CapabilityCard.js';
 
 type ActivityItem = { _id?: string; type: string; minutes: number; points: number };
+const loadActivities = () => getJson<{ activities: ActivityItem[] }>('/api/activities').then(({ activities }) => activities);
 
 export default function Activities() {
   return (
     <CapabilityCard<ActivityItem>
       title="Activities"
       description="Track student activity minutes and points."
-      path="/api/activities"
-      resourceKey="activities"
+      loadItems={loadActivities}
       emptyText="No activities yet."
       itemKey={(activity, index) => activity._id ?? `${activity.type}-${index}`}
       renderItem={(activity) => (
